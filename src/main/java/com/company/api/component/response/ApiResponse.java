@@ -1,11 +1,9 @@
 package com.company.api.component.response;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ApiResponse {
-
     public <T> Response createCorrectResponse() {
         return Response.builder()
                 .ok(true)
