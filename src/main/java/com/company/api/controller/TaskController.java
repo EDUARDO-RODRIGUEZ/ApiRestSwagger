@@ -10,8 +10,10 @@ import com.company.api.component.mapper.MapperTaskInterface;
 import com.company.api.service.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,28 +27,28 @@ public class TaskController {
     private ApiResponse response;
 
     @GetMapping
-    public Response list() {
+    public ResponseEntity<Response> list() {
         List<TaskResponse> tasksDtos = mapperTask.mapFromEntity(taskService.findAll());
-        return response.createCorrectResponse(tasksDtos);
+        return ResponseEntity.status(HttpStatus.OK).body(response.createCorrectResponse(tasksDtos));
     }
 
     @PostMapping
-    public Response save(@RequestBody TaskCreateRequest taskCreateDto) {
+    public ResponseEntity<Response> save(@Valid @RequestBody TaskCreateRequest taskCreateDto) {
         TaskResponse taskDto = mapperTask.mapFromEntity(taskService.save(taskCreateDto));
-        return response.createCorrectResponse(taskDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response.createCorrectResponse(taskDto));
     }
 
     @PutMapping("/{id}")
-    public Response update(@PathVariable("id") Long id, @RequestBody TaskUpdateRequest taskUpdateDto) {
+    public ResponseEntity<Response> update(@PathVariable("id") Long id, @Valid @RequestBody TaskUpdateRequest taskUpdateDto) {
         TaskResponse taskDto = mapperTask.mapFromEntity(taskService.update(id, taskUpdateDto));
-        return response.createCorrectResponse(taskDto);
+        return ResponseEntity.status(HttpStatus.OK).body(response.createCorrectResponse(taskDto));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Response remove(@PathVariable("id") Long id) {
+    public ResponseEntity<Response> remove(@PathVariable("id") Long id) {
         taskService.remove(id);
-        return response.createCorrectResponse();
+        return ResponseEntity.status(HttpStatus.OK).body(response.createCorrectResponse());
     }
 
 }
