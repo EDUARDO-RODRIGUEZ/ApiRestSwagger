@@ -3,6 +3,7 @@ package com.company.api.service;
 import com.company.api.dto.task.TaskCreateRequest;
 import com.company.api.dto.task.TaskUpdateRequest;
 import com.company.api.entity.Task;
+import com.company.api.exception.NotFoundEntity;
 import com.company.api.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class TaskService implements TaskServiceInterface {
     public Task find(Long id) {
         Optional<Task> boxTask = taskRepository.findById(id);
         if (boxTask.isEmpty())
-            return null; //Lanzar Exception
+            throw new NotFoundEntity();
         return boxTask.get();
     }
 
